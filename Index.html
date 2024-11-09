@@ -1,105 +1,196 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-commerce Product </title>
-<style>
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple E-commerce Website</title>
+  <style>
+    /* Basic Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-header {
-    background-color: #333;
-    color: white;
-    padding: 10px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+    /* Styling the Body */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+    }
 
-#cart {
-    background-color: #555;
-    padding: 5px 10px;
-    border-radius: 5px;
-}
+    /* Header */
+    header {
+      background-color: #333;
+      color: #fff;
+      padding: 15px;
+      text-align: center;
+    }
 
-main {
-    padding: 20px;
-}
+    /* Container for products */
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      padding: 20px;
+    }
 
-#product {
-    display: flex;
-    gap: 20px;
-}
+    /* Individual Product Card */
+    .product-card {
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      width: 200px;
+      margin: 10px;
+      padding: 10px;
+      text-align: center;
+    }
 
-#product img {
-    max-width: 300px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
+    .product-card img {
+      width: 100%;
+      height: auto;
+      border-radius: 5px;
+    }
 
-#product-details {
-    max-width: 400px;
-}
+    .product-card h3 {
+      font-size: 1.2em;
+      margin: 10px 0;
+    }
 
-#product-details h2 {
-    margin: 0;
-}
+    .product-card p {
+      color: #555;
+    }
 
-#reviews {
-    margin-top: 40px;
-}
+    .add-to-cart {
+      background-color: #28a745;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
 
-.review {
-    background-color: #f9f9f9;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    margin-bottom: 10px;
-}
-</style>
+    .add-to-cart:hover {
+      background-color: #218838;
+    }
+
+    /* Cart Modal */
+    .cart-modal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 300px;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+    }
+
+    .cart-modal h2 {
+      margin-bottom: 10px;
+    }
+
+    .cart-modal ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .cart-modal li {
+      display: flex;
+      justify-content: space-between;
+      padding: 5px 0;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .close-cart {
+      background-color: #dc3545;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <h1>My E-commerce Store</h1>
-        <div id="cart">
-            <span id="cart-count">0</span> items in cart
-        </div>
-    </header>
-    <main>
-        <section id="product">
-            <img src="product.jpg" alt="Product Image">
-            <div id="product-details">
-                <h2>Product Name</h2>
-                <p>$29.99</p>
-                <p>This is a great product that you will love!</p>
-                <button id="add-to-cart">Add to Cart</button>
-            </div>
-        </section>
-        <section id="reviews">
-            <h3>Customer Reviews</h3>
-            <div class="review">
-                <p><strong>John Doe:</strong> Great product, highly recommend!</p>
-            </div>
-            <div class="review">
-                <p><strong>Jane Smith:</strong> Good value for the price.</p>
-            </div>
-        </section>
-    </main>
-    <script >
-document.addEventListener('DOMContentLoaded', () => {
-    const cartCountElement = document.getElementById('cart-count');
-    const addToCartButton = document.getElementById('add-to-cart');
-    let cartCount = 0;
 
-    addToCartButton.addEventListener('click', () => {
-        cartCount++;
-        cartCountElement.textContent = cartCount;
+  <header>
+    <h1>Simple E-commerce Website</h1>
+  </header>
+
+  <div class="container" id="productContainer">
+    <!-- Product Cards will be injected here by JavaScript -->
+  </div>
+
+  <!-- Cart Modal -->
+  <div class="cart-modal" id="cartModal">
+    <h2>Shopping Cart</h2>
+    <ul id="cartItems"></ul>
+    <button class="close-cart" onclick="closeCart()">Close</button>
+  </div>
+
+  <script>
+    // Product Data
+    const products = [
+      { id: 1, name: 'Product 1', price: 10, image: 'https://via.placeholder.com/200' },
+      { id: 2, name: 'Product 2', price: 20, image: 'https://via.placeholder.com/200' },
+      { id: 3, name: 'Product 3', price: 15, image: 'https://via.placeholder.com/200' },
+      { id: 4, name: 'Product 4', price: 25, image: 'https://via.placeholder.com/200' }
+    ];
+
+    const cart = [];
+
+    // Load Products to Page
+    const productContainer = document.getElementById('productContainer');
+    products.forEach(product => {
+      const productCard = document.createElement('div');
+      productCard.classList.add('product-card');
+      productCard.innerHTML = `
+        <img src="${product.image}" alt="${product.name}">
+        <h3>${product.name}</h3>
+        <p>Price: $${product.price}</p>
+        <button class="add-to-cart" onclick="addToCart(${product.id})">Add to Cart</button>
+      `;
+      productContainer.appendChild(productCard);
     });
-});
-</script>
+
+    // Add Product to Cart
+    function addToCart(productId) {
+      const product = products.find(p => p.id === productId);
+      cart.push(product);
+      updateCart();
+      openCart();
+    }
+
+    // Open Cart Modal
+    function openCart() {
+      document.getElementById('cartModal').style.display = 'block';
+    }
+
+    // Close Cart Modal
+    function closeCart() {
+      document.getElementById('cartModal').style.display = 'none';
+    }
+
+    // Update Cart Display
+    function updateCart() {
+      const cartItems = document.getElementById('cartItems');
+      cartItems.innerHTML = '';
+      cart.forEach((product, index) => {
+        const item = document.createElement('li');
+        item.innerHTML = `${product.name} - $${product.price} <button onclick="removeFromCart(${index})">Remove</button>`;
+        cartItems.appendChild(item);
+      });
+    }
+
+    // Remove Item from Cart
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      updateCart();
+    }
+  </script>
+
 </body>
 </html>
